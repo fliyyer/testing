@@ -13,18 +13,32 @@ const ListAbsen = () => {
   useEffect(() => {
     let absensiRef = db.collection("absensi");
     let startOfDay = new Date();
-    startOfDay.setHours(0,0,0,0);
+    startOfDay.setHours(0, 0, 0, 0);
     let endOfDay = new Date();
-    endOfDay.setHours(23,59,59,999);
-  
+    endOfDay.setHours(23, 59, 59, 999);
+
     if (tanggalAbsen) {
       let selectedDate = new Date(tanggalAbsen);
-      startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-      endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59, 999);
+      startOfDay = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate()
+      );
+      endOfDay = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      );
     }
-  
-    absensiRef = absensiRef.where("waktu", ">=", startOfDay).where("waktu", "<=", endOfDay);
-  
+
+    absensiRef = absensiRef
+      .where("waktu", ">=", startOfDay)
+      .where("waktu", "<=", endOfDay);
+
     absensiRef.orderBy("waktu", "desc").onSnapshot((snapshot) => {
       const data = [];
       snapshot.forEach((doc) => {
@@ -33,7 +47,6 @@ const ListAbsen = () => {
       setAbsenData(data);
     });
   }, [tanggalAbsen]);
-  
 
   const getKeteranganColor = (keterangan) => {
     switch (keterangan) {
@@ -48,9 +61,15 @@ const ListAbsen = () => {
     }
   };
 
-  const totalHadir = absenData.filter((absen) => absen.keterangan === "Hadir").length;
-  const totalIzin = absenData.filter((absen) => absen.keterangan === "Izin").length;
-  const totalSakit = absenData.filter((absen) => absen.keterangan === "Sakit").length;
+  const totalHadir = absenData.filter(
+    (absen) => absen.keterangan === "Hadir"
+  ).length;
+  const totalIzin = absenData.filter(
+    (absen) => absen.keterangan === "Izin"
+  ).length;
+  const totalSakit = absenData.filter(
+    (absen) => absen.keterangan === "Sakit"
+  ).length;
 
   return (
     <div>
@@ -65,13 +84,13 @@ const ListAbsen = () => {
           id="tanggalAbsen"
           value={tanggalAbsen}
           onChange={handleTanggalChange}
-          max={new Date().toISOString().split("T")[0]} 
+          max={new Date().toISOString().split("T")[0]}
           className="border-2 border-gray-200 p-2 rounded-lg"
         />
       </div>
       <div className="px-4 mt-12">
-      <div className="mb-4">
-        <div className="font-medium">
+        <div className="mb-4">
+          <div className="font-medium">
             Hadir: <span className="text-green-500">{totalHadir}</span>
           </div>
           <div className="font-medium">
@@ -83,18 +102,18 @@ const ListAbsen = () => {
         </div>
         <table className="min-w-full ">
           <thead>
-            <tr>
-              <th className="text-left">No</th>
-              <th className="text-left">Nama</th>
-              <th className="text-left">Keterangan</th>
-              <th className="text-left">Divisi</th>
-              <th className="text-left">Waktu</th>
+            <tr >
+              <th className="border-2 text-sm border-gray-200 px-1 py-1 text-center ">No</th>
+              <th className="text-left border-2 text-sm border-gray-200 px-1 py-1 sm:px-4 sm:py-2 ">Nama</th>
+              <th className="text-left border-2 text-sm border-gray-200 px-1 py-1 sm:px-4 sm:py-2 ">Keterangan</th>
+              <th className="text-left border-2 text-sm border-gray-200 px-1 py-1 sm:px-4 sm:py-2 ">Divisi</th>
+              <th className="text-left border-2 text-sm border-gray-200 px-1 py-1 sm:px-4 sm:py-2 ">Waktu</th>
             </tr>
           </thead>
           <tbody>
             {absenData.map((absen, index) => (
               <tr key={absen.id}>
-                <td className="border-2 text-sm border-gray-200 px-1 py-1 sm:px-4 sm:py-2">
+                <td className="border-2 text-sm border-gray-200 px-1 py-1 text-center">
                   {index + 1}
                 </td>
                 <td className="border-2 text-sm border-gray-200 px-1 py-1 sm:px-4 sm:py-2">
@@ -112,7 +131,10 @@ const ListAbsen = () => {
                 </td>
                 <td className="border-2 border-gray-200 px-1 py-1 sm:px-4 sm:py-2">
                   {absen.waktu &&
-                    new Date(absen.waktu.seconds * 1000).toLocaleString()}
+                    new Date(absen.waktu.seconds * 1000).toLocaleTimeString(
+                      "en-US",
+                      { hour: "numeric", minute: "numeric" }
+                    )}
                 </td>
               </tr>
             ))}
