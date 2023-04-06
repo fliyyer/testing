@@ -12,11 +12,19 @@ const ListAbsen = () => {
 
   useEffect(() => {
     let absensiRef = db.collection("absensi");
-
+    let startOfDay = new Date();
+    startOfDay.setHours(0,0,0,0);
+    let endOfDay = new Date();
+    endOfDay.setHours(23,59,59,999);
+  
     if (tanggalAbsen) {
-      absensiRef = absensiRef.where("waktu", ">=", new Date(tanggalAbsen));
+      let selectedDate = new Date(tanggalAbsen);
+      startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+      endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59, 999);
     }
-
+  
+    absensiRef = absensiRef.where("waktu", ">=", startOfDay).where("waktu", "<=", endOfDay);
+  
     absensiRef.orderBy("waktu", "desc").onSnapshot((snapshot) => {
       const data = [];
       snapshot.forEach((doc) => {
@@ -25,6 +33,7 @@ const ListAbsen = () => {
       setAbsenData(data);
     });
   }, [tanggalAbsen]);
+  
 
   const getKeteranganColor = (keterangan) => {
     switch (keterangan) {
@@ -39,6 +48,10 @@ const ListAbsen = () => {
     }
   };
 
+  const totalHadir = absenData.filter((absen) => absen.keterangan === "Hadir").length;
+  const totalIzin = absenData.filter((absen) => absen.keterangan === "Izin").length;
+  const totalSakit = absenData.filter((absen) => absen.keterangan === "Sakit").length;
+
   return (
     <div>
       <Navbar />
@@ -52,10 +65,22 @@ const ListAbsen = () => {
           id="tanggalAbsen"
           value={tanggalAbsen}
           onChange={handleTanggalChange}
+          max={new Date().toISOString().split("T")[0]} 
           className="border-2 border-gray-200 p-2 rounded-lg"
         />
       </div>
       <div className="px-4 mt-12">
+      <div className="mb-4">
+        <div className="font-medium">
+            Hadir: <span className="text-green-500">{totalHadir}</span>
+          </div>
+          <div className="font-medium">
+            Izin: <span className="text-yellow-500">{totalIzin}</span>
+          </div>
+          <div className="font-medium">
+            Sakit: <span className="text-red-500">{totalSakit}</span>
+          </div>
+        </div>
         <table className="min-w-full ">
           <thead>
             <tr>

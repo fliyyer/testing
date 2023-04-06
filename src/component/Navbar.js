@@ -68,9 +68,21 @@ const Navbar = () => {
             <p className="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
               {`Hello, ${user.email}`}
             </p>
+            <Link
+              to='/absensi'
+              className="block mt-2 lg:inline-block lg:mt-0 text-black hover:text-red-700 mr-4"
+            >
+              Absensi
+            </Link>
+            <Link
+              to='/listabsen'
+              className="block mt-2 lg:inline-block lg:mt-0 text-black hover:text-red-700 mr-4"
+            >
+              List Absensi
+            </Link>
             <button
               onClick={handleLogout}
-              className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-red-700 mr-4"
+              className="block mt-2 lg:inline-block lg:mt-0 text-black hover:text-red-700 mr-4"
             >
               Logout
             </button>

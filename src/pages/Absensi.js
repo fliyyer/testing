@@ -115,8 +115,8 @@ const Absensi = () => {
             setKeterangan("");
             setOption("");
             Swal.fire(
-              'Good job!',
-              'You clicked the button!',
+              'Yhank You!',
+              'Absenmu Telah Tersimpan',
               'success'
             )
             navigate("/listabsen");
@@ -154,7 +154,7 @@ const Absensi = () => {
       <label class="flex flex-col space-y-1">
         <span class="font-medium">Divisi:</span>
         <select value={option} onChange={handleOptionChange} class="rounded-lg border-gray-300 border p-2">
-          <option value="">Pilih option</option>
+          <option value="">Pilih Divisi</option>
           <option value="EMO">EMO</option>
           <option value="PMO">PMO</option>
           <option value="GDS BECdex">GDS BECdex</option>
@@ -163,7 +163,7 @@ const Absensi = () => {
           <option value="WDA MMH">WDA MMH</option>
         </select>
       </label>
-      <button type="submit" disabled={submittedToday} class="bg-blue-500 text-white rounded-lg py-2 disabled:bg-gray-400 disabled:cursor-not-allowed">{submittedToday ? "Submitted Today" : "Submit"}</button>
+      <button type="submit" disabled={submittedToday} class="bg-blue-500 hover:bg-blue-800 text-white rounded-lg py-2 disabled:bg-gray-400 disabled:cursor-not-allowed">{submittedToday ? "Submitted Today" : "Submit"}</button>
     </form>
   </div>
 </div>
